@@ -17,7 +17,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const CHART_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
-export function GraphScreen() {
+export function GraphScreen({ isGlassModeEnabled = false }: { isGlassModeEnabled?: boolean }) {
   const { data: currencies } = useCurrencies();
   const [base, setBase] = useState('USD');
   const [target, setTarget] = useState('EUR');
@@ -71,7 +71,7 @@ export function GraphScreen() {
         </p>
       </div>
 
-      <div className="sleek-card p-8 flex flex-col gap-10">
+      <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 flex flex-col gap-10")}>
         {/* Controls Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           <div className="flex flex-col gap-8">
@@ -253,7 +253,12 @@ export function GraphScreen() {
                  <motion.div 
                    key={code}
                    whileHover={{ y: -4 }}
-                   className="p-6 bg-background border border-border rounded-[24px] flex flex-col gap-4 group transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                   className={cn(
+                      "p-6 flex flex-col gap-4 group transition-all rounded-[16px]",
+                      isGlassModeEnabled 
+                        ? "glass-card" 
+                        : "bg-background border border-border hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                    )}
                  >
                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">

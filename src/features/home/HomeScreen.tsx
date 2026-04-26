@@ -8,9 +8,16 @@ interface HomeScreenProps {
   selectedTo: string;
   setSelectedFrom: (from: string) => void;
   setSelectedTo: (to: string) => void;
+  isGlassModeEnabled?: boolean;
 }
 
-export function HomeScreen({ selectedFrom, selectedTo, setSelectedFrom, setSelectedTo }: HomeScreenProps) {
+export function HomeScreen({ 
+  selectedFrom, 
+  selectedTo, 
+  setSelectedFrom, 
+  setSelectedTo,
+  isGlassModeEnabled = false
+}: HomeScreenProps) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -30,15 +37,23 @@ export function HomeScreen({ selectedFrom, selectedTo, setSelectedFrom, setSelec
         <ConverterWidget 
           onFromChange={setSelectedFrom} 
           onToChange={setSelectedTo} 
+          isGlassModeEnabled={isGlassModeEnabled}
         />
       </div>
 
       <div className="w-full">
-        <HistoricalChart from={selectedFrom} to={selectedTo} />
+        <HistoricalChart 
+          from={selectedFrom} 
+          to={selectedTo} 
+          isGlassModeEnabled={isGlassModeEnabled}
+        />
       </div>
 
       <div className="w-full">
-        <LiveRates base={selectedFrom} />
+        <LiveRates 
+          base={selectedFrom} 
+          isGlassModeEnabled={isGlassModeEnabled}
+        />
       </div>
     </motion.div>
   );

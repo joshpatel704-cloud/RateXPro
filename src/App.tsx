@@ -17,6 +17,7 @@ import {
   Globe
 } from 'lucide-react';
 import { cn } from './lib/utils';
+import { AnimatedGradientBackground } from './components/ui/AnimatedGradientBackground';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,9 @@ export default function App() {
       return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
     }
     return 'light';
+  });
+  const [isGlassModeEnabled, setIsGlassModeEnabled] = useState(() => {
+    return localStorage.getItem('isGlassModeEnabled') === 'true';
   });
 
   // Hide on scroll logic
@@ -78,7 +82,12 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    localStorage.setItem('isGlassModeEnabled', String(isGlassModeEnabled));
+  }, [isGlassModeEnabled]);
+
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const toggleGlassMode = () => setIsGlassModeEnabled(prev => !prev);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -89,28 +98,40 @@ export default function App() {
             selectedTo={selectedTo}
             setSelectedFrom={setSelectedFrom}
             setSelectedTo={setSelectedTo}
+            isGlassModeEnabled={isGlassModeEnabled}
           />
         );
       case 'graph':
-        return <GraphScreen />;
+        return <GraphScreen isGlassModeEnabled={isGlassModeEnabled} />;
       case 'about':
-        return <AboutScreen theme={theme} onToggleTheme={toggleTheme} />;
+        return (
+          <AboutScreen 
+            theme={theme} 
+            onToggleTheme={toggleTheme} 
+            isGlassModeEnabled={isGlassModeEnabled}
+            onToggleGlassMode={toggleGlassMode}
+          />
+        );
       default:
         return <HomeScreen 
           selectedFrom={selectedFrom}
           selectedTo={selectedTo}
           setSelectedFrom={setSelectedFrom}
           setSelectedTo={setSelectedTo}
+          isGlassModeEnabled={isGlassModeEnabled}
         />;
     }
   };
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background flex flex-col font-sans transition-colors duration-300 pb-24">
-        {/* Header (SliverAppBar equivalent with Glassmorphism) */}
+      <div className={cn("min-h-screen flex flex-col font-sans transition-colors duration-300 pb-24 relative", theme)}>
+        {/* Animated Flowing Gradient Background */}
+        <AnimatedGradientBackground theme={theme} />
+
+        {/* Header (Extreme Glassmorphism) */}
         <nav className={cn(
-          "bg-background/65 backdrop-blur-[15px] border-b border-border/30 h-[72px] flex items-center fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "bg-white/10 dark:bg-black/5 backdrop-blur-[25px] border-b border-white/20 h-[72px] flex items-center fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           showHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
         )}>
           <div className="max-w-4xl mx-auto px-6 w-full flex justify-end items-center">
@@ -140,9 +161,9 @@ export default function App() {
           {renderContent()}
         </main>
 
-        {/* Bottom Navigation Bar with Glassmorphism (macOS Dock style) */}
+        {/* Bottom Navigation Bar with Extreme Glassmorphism (macOS Dock style) */}
         <div className="fixed bottom-0 left-0 right-0 z-50 px-6 pb-8 pointer-events-none">
-          <div className="max-w-md mx-auto bg-white/30 dark:bg-black/20 backdrop-blur-[20px] border border-white/20 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] p-2 flex items-center justify-between pointer-events-auto overflow-hidden">
+          <div className="max-w-md mx-auto bg-white/20 dark:bg-black/20 backdrop-blur-[25px] border border-white/30 rounded-full shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] p-2 flex items-center justify-between pointer-events-auto overflow-hidden">
             <NavButton 
               active={activeTab === 'home'} 
               onClick={() => setActiveTab('home')} 

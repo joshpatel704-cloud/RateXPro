@@ -14,14 +14,17 @@ import { useHistoricalRates, TimeFilter } from '../../hooks/useRates';
 import { cn } from '../../lib/utils';
 import { TrendingUp, Clock, Info } from 'lucide-react';
 import { motion } from 'motion/react';
+import { HoverLiftWrapper } from '../../components/animations/HoverLiftWrapper';
+import { Skeleton } from '../../components/ui/Skeleton';
 
 interface HistoricalChartProps {
   from: string;
   to: string;
   isEmbed?: boolean;
+  isGlassModeEnabled?: boolean;
 }
 
-export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
+export function HistoricalChart({ from, to, isEmbed, isGlassModeEnabled = false }: HistoricalChartProps) {
   const [filter, setFilter] = useState<TimeFilter>('1M');
   const { data, isLoading, isError } = useHistoricalRates(from, to, filter);
 
@@ -31,6 +34,27 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
   const firstRate = chartData[0]?.rate;
   const lastRate = chartData[chartData.length - 1]?.rate;
   const change = firstRate && lastRate ? ((lastRate - firstRate) / firstRate) * 100 : 0;
+
+  if (isLoading) {
+    return (
+      <HoverLiftWrapper liftAmount={-3} strongShadow={isGlassModeEnabled}>
+        <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-10 flex flex-col gap-10 h-[500px]")}>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-6 w-32" isGlass={isGlassModeEnabled} />
+              <Skeleton className="h-4 w-48" isGlass={isGlassModeEnabled} />
+            </div>
+            <Skeleton className="h-10 w-64" isGlass={isGlassModeEnabled} />
+          </div>
+          <Skeleton className="flex-1 w-full" isGlass={isGlassModeEnabled} />
+          <div className="flex items-center justify-between gap-4">
+             <Skeleton className="h-4 w-32" isGlass={isGlassModeEnabled} />
+             <Skeleton className="h-6 w-24 rounded-full" isGlass={isGlassModeEnabled} />
+          </div>
+        </div>
+      </HoverLiftWrapper>
+    );
+  }
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -68,7 +92,12 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
           </p>
         </div>
 
-        <div className="flex p-1.5 bg-background border border-border rounded-[14px] w-fit">
+        <div className={cn(
+          "flex p-1.5 w-fit transition-all duration-300",
+          isGlassModeEnabled 
+            ? "glass-card" 
+            : "bg-background border border-border rounded-[14px]"
+        )}>
           {filters.map((f) => (
             <button
               key={f}
@@ -76,7 +105,12 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
               className={cn(
                 "px-5 py-2 text-[11px] font-black rounded-lg transition-all uppercase tracking-widest",
                 filter === f
-                  ? "bg-card-bg text-primary shadow-sm"
+                  ? cn(
+                      "text-primary shadow-sm rounded-lg",
+                      isGlassModeEnabled 
+                        ? "glass-card" 
+                        : "bg-card-bg border border-border"
+                    )
                   : "text-secondary hover:text-ink-deep"
               )}
             >
@@ -87,15 +121,6 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
       </div>
 
       <div className="h-[300px] w-full relative">
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/40 z-10 backdrop-blur-[2px] rounded-2xl">
-             <div className="flex flex-col items-center gap-4">
-               <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-               <p className="text-slate-500 font-black text-[10px] uppercase tracking-widest">Compiling Analytics...</p>
-             </div>
-          </div>
-        )}
-
         {isError && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center">
             <div className="max-w-xs flex flex-col items-center gap-4">
@@ -147,7 +172,12 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
           <Clock className="w-4 h-4 text-secondary" />
           <span className="text-[10px] font-black text-secondary uppercase tracking-widest leading-none">Powered by Alpha Global Stream</span>
         </div>
-        <div className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 text-emerald-500 rounded-full border border-emerald-500/20">
+        <div className={cn(
+          "flex items-center gap-2 px-4 py-1.5 rounded-full text-emerald-500",
+          isGlassModeEnabled 
+            ? "glass-card" 
+            : "bg-emerald-500/10 border border-emerald-500/20"
+        )}>
            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
            <span className="text-[10px] font-black uppercase tracking-widest">Active Market</span>
         </div>
@@ -164,7 +194,7 @@ export function HistoricalChart({ from, to, isEmbed }: HistoricalChartProps) {
   }
 
   return (
-    <div className="sleek-card p-8 md:p-10 flex flex-col gap-10">
+    <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-10 flex flex-col gap-10 h-full")}>
       {chartContent}
     </div>
   );
