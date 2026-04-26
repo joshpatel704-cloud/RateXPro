@@ -46,7 +46,7 @@ export const AnimatedGradientBackground = memo(function AnimatedGradientBackgrou
           rotate: [0, 5, 0],
         }}
         transition={{
-          duration: 8,
+          duration: 2.5,
           ease: "linear",
           repeat: Infinity,
           repeatType: "reverse",
