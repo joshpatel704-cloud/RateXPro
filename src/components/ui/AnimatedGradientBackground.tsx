@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "motion/react";
 import { cn } from "../../lib/utils";
 
@@ -5,7 +6,7 @@ interface AnimatedGradientBackgroundProps {
   theme: 'light' | 'dark';
 }
 
-export function AnimatedGradientBackground({ theme }: AnimatedGradientBackgroundProps) {
+export const AnimatedGradientBackground = memo(function AnimatedGradientBackground({ theme }: AnimatedGradientBackgroundProps) {
   // Define color palettes
   const darkColors = [
     "rgba(2, 6, 23, 1)", // Deep Navy
@@ -26,7 +27,7 @@ export function AnimatedGradientBackground({ theme }: AnimatedGradientBackground
   return (
     <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none">
       <motion.div
-        className="absolute inset-[-100%]"
+        className="absolute inset-[-100%] will-change-transform will-change-background"
         animate={{
           background: [
             `radial-gradient(circle at 20% 20%, ${colors[0]} 0%, transparent 50%), 
@@ -55,4 +56,4 @@ export function AnimatedGradientBackground({ theme }: AnimatedGradientBackground
       <div className="absolute inset-0 backdrop-blur-[120px] pointer-events-none" />
     </div>
   );
-}
+});

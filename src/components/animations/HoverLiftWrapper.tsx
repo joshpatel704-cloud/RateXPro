@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 import { motion } from "motion/react";
 import { cn } from "../../lib/utils";
 
@@ -11,7 +11,7 @@ interface HoverLiftWrapperProps {
   key?: string | number;
 }
 
-export function HoverLiftWrapper({
+export const HoverLiftWrapper = memo(function HoverLiftWrapper({
   children,
   className,
   liftAmount = -5,
@@ -20,7 +20,7 @@ export function HoverLiftWrapper({
 }: HoverLiftWrapperProps) {
   return (
     <motion.div
-      className={cn("relative transition-shadow duration-200", className)}
+      className={cn("relative transition-shadow duration-200 transform-gpu", className)}
       whileHover={{ 
         y: liftAmount, 
         scale: scaleAmount,
@@ -36,4 +36,4 @@ export function HoverLiftWrapper({
       {children}
     </motion.div>
   );
-}
+});
