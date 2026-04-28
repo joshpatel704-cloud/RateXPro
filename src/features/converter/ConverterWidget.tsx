@@ -5,7 +5,6 @@ import { CurrencySelect } from '../../components/ui/CurrencySelect';
 import { formatCurrency, cn } from '../../lib/utils';
 import { motion } from 'motion/react';
 import { HoverLiftWrapper } from '../../components/animations/HoverLiftWrapper';
-import { Skeleton } from '../../components/ui/Skeleton';
 
 interface ConverterWidgetProps {
   onFromChange?: (from: string) => void;
@@ -51,21 +50,14 @@ export function ConverterWidget({ onFromChange, onToChange, isGlassModeEnabled =
   if (currenciesLoading) {
     return (
       <HoverLiftWrapper liftAmount={-3} strongShadow={isGlassModeEnabled}>
-        <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-12 flex flex-col gap-10 h-[480px]")}>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-10 items-end">
-            <Skeleton className="h-16 w-full" isGlass={isGlassModeEnabled} />
-            <div className="flex items-center gap-4">
-              <Skeleton className="h-14 flex-1" isGlass={isGlassModeEnabled} />
-              <Skeleton variant="circle" className="w-12 h-12 shrink-0" isGlass={isGlassModeEnabled} />
-              <Skeleton className="h-14 flex-1" isGlass={isGlassModeEnabled} />
-            </div>
+        <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-12 flex flex-col items-center justify-center gap-8 h-[480px]")}>
+          <div className="relative">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse" />
+            <RefreshCw className="w-16 h-16 text-primary animate-spin relative z-10" />
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 pt-8 border-t border-border">
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-8 w-48" isGlass={isGlassModeEnabled} />
-              <Skeleton className="h-16 w-64 md:w-96" isGlass={isGlassModeEnabled} />
-            </div>
-            <Skeleton className="h-16 w-full md:w-[280px]" isGlass={isGlassModeEnabled} />
+          <div className="text-center flex flex-col gap-3">
+            <h3 className="text-2xl font-black tracking-tight text-ink-deep">RateX Engine Waking Up</h3>
+            <p className="text-secondary font-bold text-xs uppercase tracking-[0.2em] max-w-[280px] leading-relaxed mx-auto">Connecting to global financial nodes for real-time exchange validation...</p>
           </div>
         </div>
       </HoverLiftWrapper>
@@ -166,9 +158,12 @@ export function ConverterWidget({ onFromChange, onToChange, isGlassModeEnabled =
             )}
             
             {conversionLoading && (
-              <div className="flex flex-col gap-4">
-                 <Skeleton className="h-8 w-48" isGlass={isGlassModeEnabled} />
-                 <Skeleton className="h-16 w-64 md:w-96" isGlass={isGlassModeEnabled} />
+              <div className="flex items-center gap-4 py-8">
+                <RefreshCw className="w-8 h-8 text-primary animate-spin" />
+                <div className="flex flex-col">
+                  <span className="text-sm font-black text-ink-deep uppercase tracking-widest">Recalculating...</span>
+                  <span className="text-[10px] text-secondary font-bold uppercase tracking-widest">Applying live market spread</span>
+                </div>
               </div>
             )}
           </div>

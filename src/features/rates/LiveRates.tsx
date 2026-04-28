@@ -5,7 +5,6 @@ import { cn, getFlagUrl } from '../../lib/utils';
 import { motion } from 'motion/react';
 import { CurrencyDetailModal } from './CurrencyDetailModal';
 import { HoverLiftWrapper } from '../../components/animations/HoverLiftWrapper';
-import { Skeleton } from '../../components/ui/Skeleton';
 
 interface LiveRatesProps {
   base: string;
@@ -97,23 +96,12 @@ export function LiveRates({ base, isGlassModeEnabled = false }: LiveRatesProps) 
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 relative transform-gpu will-change-transform">
             {isLoading ? (
-              Array.from({ length: 9 }).map((_, i) => (
-                <div key={i} className={cn(
-                  "flex items-center justify-between p-5 rounded-2xl border border-transparent",
-                  isGlassModeEnabled ? "glass-card" : "bg-card-bg border-border"
-                )}>
-                  <div className="flex items-center gap-4">
-                    <Skeleton variant="circle" className="w-10 h-10" isGlass={isGlassModeEnabled} />
-                    <div className="flex flex-col gap-2">
-                      <Skeleton className="h-4 w-12" isGlass={isGlassModeEnabled} />
-                      <Skeleton className="h-2 w-20" isGlass={isGlassModeEnabled} />
-                    </div>
-                  </div>
-                  <Skeleton className="h-6 w-16" isGlass={isGlassModeEnabled} />
-                </div>
-              ))
+              <div className="col-span-full flex flex-col items-center justify-center gap-4 py-20">
+                <RefreshCw className="w-12 h-12 text-primary animate-spin" />
+                <p className="text-secondary font-black text-xs uppercase tracking-[0.2em]">Syncing Markets...</p>
+              </div>
             ) : rates.length > 0 ? (
               rates.map(([code, rate], index) => (
                 <RateItem 

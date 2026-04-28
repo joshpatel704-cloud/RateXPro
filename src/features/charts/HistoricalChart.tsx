@@ -12,10 +12,9 @@ import {
 } from 'recharts';
 import { useHistoricalRates, TimeFilter } from '../../hooks/useRates';
 import { cn } from '../../lib/utils';
-import { TrendingUp, Clock, Info } from 'lucide-react';
+import { TrendingUp, Clock, Info, RefreshCw } from 'lucide-react';
 import { motion } from 'motion/react';
 import { HoverLiftWrapper } from '../../components/animations/HoverLiftWrapper';
-import { Skeleton } from '../../components/ui/Skeleton';
 
 interface HistoricalChartProps {
   from: string;
@@ -38,18 +37,14 @@ export function HistoricalChart({ from, to, isEmbed, isGlassModeEnabled = false 
   if (isLoading) {
     return (
       <HoverLiftWrapper liftAmount={-3} strongShadow={isGlassModeEnabled}>
-        <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-10 flex flex-col gap-10 h-[500px]")}>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-6 w-32" isGlass={isGlassModeEnabled} />
-              <Skeleton className="h-4 w-48" isGlass={isGlassModeEnabled} />
-            </div>
-            <Skeleton className="h-10 w-64" isGlass={isGlassModeEnabled} />
+        <div className={cn(isGlassModeEnabled ? "glass-card" : "sleek-card", "p-8 md:p-10 flex flex-col items-center justify-center gap-6 h-[500px]")}>
+          <div className="relative">
+            <RefreshCw className="w-16 h-16 text-primary animate-spin opacity-10" />
+            <RefreshCw className="w-16 h-16 text-primary animate-spin absolute inset-0 [animation-duration:2s]" />
           </div>
-          <Skeleton className="flex-1 w-full" isGlass={isGlassModeEnabled} />
-          <div className="flex items-center justify-between gap-4">
-             <Skeleton className="h-4 w-32" isGlass={isGlassModeEnabled} />
-             <Skeleton className="h-6 w-24 rounded-full" isGlass={isGlassModeEnabled} />
+          <div className="text-center">
+            <h3 className="text-lg font-black text-ink-deep uppercase tracking-widest mb-2">Analyzing History</h3>
+            <p className="text-secondary text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse">Fetching mid-market performance data...</p>
           </div>
         </div>
       </HoverLiftWrapper>
