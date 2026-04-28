@@ -9,10 +9,10 @@ interface AnimatedGradientBackgroundProps {
 export const AnimatedGradientBackground = memo(function AnimatedGradientBackground({ theme }: AnimatedGradientBackgroundProps) {
   // Define color palettes
   const darkColors = [
-    "rgba(2, 6, 23, 1)", // Deep Navy
-    "rgba(30, 27, 75, 1)", // darker indigo
-    "rgba(76, 29, 149, 1)", // rich purple
-    "rgba(8, 145, 178, 1)", // subtle neon cyan
+    "#020617", // Almost Black (Base)
+    "#1E1B4B", // Very Dark Indigo (Deep Glow)
+    "#0F172A", // Deep Slate (Subtle Shift)
+    "#111827", // Rich Gray (Midtone)
   ];
 
   const lightColors = [
@@ -30,17 +30,17 @@ export const AnimatedGradientBackground = memo(function AnimatedGradientBackgrou
         className="absolute inset-[-100%] will-change-transform will-change-background"
         animate={{
           background: [
-            `radial-gradient(circle at 20% 20%, ${colors[0]} 0%, transparent 50%), 
-             radial-gradient(circle at 80% 80%, ${colors[1]} 0%, transparent 50%),
-             radial-gradient(circle at 50% 50%, ${colors[2]} 0%, ${colors[0]} 100%)`,
+            `radial-gradient(circle at 30% 30%, ${colors[1]} 0%, transparent 60%), 
+             radial-gradient(circle at 70% 70%, ${colors[2]} 0%, transparent 60%),
+             radial-gradient(circle at 50% 50%, ${colors[0]} 0%, ${colors[0]} 100%)`,
             
-            `radial-gradient(circle at 80% 20%, ${colors[3]} 0%, transparent 50%), 
-             radial-gradient(circle at 20% 80%, ${colors[2]} 0%, transparent 50%),
-             radial-gradient(circle at 50% 50%, ${colors[1]} 0%, ${colors[0]} 100%)`,
-
-            `radial-gradient(circle at 50% 10%, ${colors[1]} 0%, transparent 50%), 
-             radial-gradient(circle at 50% 90%, ${colors[3]} 0%, transparent 50%),
+            `radial-gradient(circle at 70% 30%, ${colors[3]} 0%, transparent 60%), 
+             radial-gradient(circle at 30% 70%, ${colors[1]} 0%, transparent 60%),
              radial-gradient(circle at 50% 50%, ${colors[2]} 0%, ${colors[0]} 100%)`,
+
+            `radial-gradient(circle at 50% 20%, ${colors[2]} 0%, transparent 60%), 
+             radial-gradient(circle at 50% 80%, ${colors[3]} 0%, transparent 60%),
+             radial-gradient(circle at 50% 50%, ${colors[1]} 0%, ${colors[0]} 100%)`,
           ],
           scale: [1, 1.1, 1],
           rotate: [0, 5, 0],
